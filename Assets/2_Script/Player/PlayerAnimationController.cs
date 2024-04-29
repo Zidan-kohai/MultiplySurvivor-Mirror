@@ -10,6 +10,8 @@ public class PlayerAnimationController : MonoBehaviour
     public void SetIMove(IMove movement)
     {
         this.movement = movement;
+
+        animator.SetTrigger("GetRevolverB");
     }
 
     public void Fall()
@@ -31,15 +33,15 @@ public class PlayerAnimationController : MonoBehaviour
         animator.SetFloat("MoveSpeed", moveSpeed);
 
 
-        //bool jumped = movement.IsJump();
+        bool jumped = movement.IsJump();
 
-        //if (jumped)
-        //{
-        //    animator.SetBool("Jumping", true);
-        //}
-        //else
-        //{
-        //    animator.SetBool("Jumping", false);
-        //}
+        if (jumped)
+        {
+            animator.SetBool("Jumping", true);
+        }
+        else
+        {
+            animator.SetBool("Jumping", false);
+        }
     }
 }

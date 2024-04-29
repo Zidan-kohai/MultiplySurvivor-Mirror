@@ -9,16 +9,19 @@ public class InputManager : MonoBehaviour
     private bool space;
     private bool isE;
     private bool isLeftShift;
+    private bool isFireButtonDown;
+
     public float GetMouseDeltaX => mouseDeltaX;
     public float GetMouseDeltaY => mouseDeltaY;
     public float GetMoveHorizontal => moveHorizontal;
     public float GetMoveVertical => moveVertical;
     public bool GetSpace => space;
     public bool GetIsE => isE;
-
     public bool GetIsLeftShift => isLeftShift;
 
-    void Update()
+    public bool GetIsFireButtonDown => isFireButtonDown;
+
+    private void Update()
     {
         mouseDeltaX = Input.GetAxis("Mouse X");
 
@@ -32,6 +35,8 @@ public class InputManager : MonoBehaviour
         isE = Input.GetKey(KeyCode.E);
 
         isLeftShift = Input.GetKey(KeyCode.LeftShift);
+
+        isFireButtonDown = Input.GetMouseButtonDown(0);
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {

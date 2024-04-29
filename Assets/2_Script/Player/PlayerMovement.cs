@@ -40,6 +40,9 @@ public class PlayerMovement : NetworkBehaviour, IPlayer, IHumanoid, ISee, IMove
     [Header("Interactive")]
     [SerializeField] private float distanceToHelp;
 
+
+    [SerializeField] ParticleSystem fire;
+
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -49,10 +52,7 @@ public class PlayerMovement : NetworkBehaviour, IPlayer, IHumanoid, ISee, IMove
 
         if (isLocalPlayer)
         {
-            Debug.Log("gameObject.name: " + gameObject.name);
-            Debug.Log("virtualCamera.Priority: " + virtualCamera.Priority);
             virtualCamera.Priority = 5;
-            Debug.Log("virtualCamera.Priority: " + virtualCamera.Priority);
         }
 
     }
@@ -79,6 +79,20 @@ public class PlayerMovement : NetworkBehaviour, IPlayer, IHumanoid, ISee, IMove
 
         if (state != PlayerState.Fall && state != PlayerState.Death)
             Help();
+
+        if(inputManager.GetIsFireButtonDown)
+        {
+            fire.Play();
+            RaycastHit hit;
+            if(Physics.Raycast(fire.transform.position, fire.transform.forward, out hit))
+            {
+                Debug.Log("Hit: " + hit.transform.gameObject.name);
+                if(hit.transform.TryGetComponent(out EnemyController enemy))
+                {
+                    enemy.Hit(5);
+                }
+            }
+        }    
     }
 
     public Transform GetTransform()
@@ -103,6 +117,7 @@ public class PlayerMovement : NetworkBehaviour, IPlayer, IHumanoid, ISee, IMove
 
     public void Fall()
     {
+        NetworkServer.Destroy(gameObject);
         ChangeState(PlayerState.Fall);
     }
 
@@ -285,6 +300,9 @@ public class PlayerMovement : NetworkBehaviour, IPlayer, IHumanoid, ISee, IMove
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawRay(groundChekcRaycastOrigin.position, Vector3.down * groundChekcRaycastHeight);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(fire.transform.position, fire.transform.forward * 100);
     }
 
 }
