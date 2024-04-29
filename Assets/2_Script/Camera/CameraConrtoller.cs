@@ -1,13 +1,10 @@
-﻿using Cinemachine;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraConrtoller : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private Camera camera;
     [SerializeField] private InputManager inputManager;
-    [SerializeField] private CinemachineVirtualCamera firstPersonCamera;
-    [SerializeField] private CinemachineVirtualCamera thirdPersonCamera;
 
     [SerializeField] private float mouseSensitivity;
     [SerializeField] private float minVerticalRotateClamp = -90f;
@@ -21,12 +18,8 @@ public class CameraConrtoller : MonoBehaviour
         switch (state)
         {
             case CameraState.First:
-                firstPersonCamera.gameObject.SetActive(true);
-                thirdPersonCamera.gameObject.SetActive(false);
                 break;
             case CameraState.Third:
-                firstPersonCamera.gameObject.SetActive(false);
-                thirdPersonCamera.gameObject.SetActive(true);
                 break;
         }
     }
@@ -53,12 +46,8 @@ public class CameraConrtoller : MonoBehaviour
         switch (state)
         {
             case CameraState.First:
-                firstPersonCamera.gameObject.SetActive(true);
-                thirdPersonCamera.gameObject.SetActive(false);
                 break;
             case CameraState.Third:
-                firstPersonCamera.gameObject.SetActive(false);
-                thirdPersonCamera.gameObject.SetActive(true);
                 break;
         }
     }
@@ -68,11 +57,11 @@ public class CameraConrtoller : MonoBehaviour
         float mouseY = inputManager.GetMouseDeltaY * mouseSensitivity * Time.deltaTime;
         verticalRotation -= mouseY;
         verticalRotation = Mathf.Clamp(verticalRotation, minVerticalRotateClamp, maxVerticalRotateClamp);
-        firstPersonCamera.transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
+        transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
     }
 
     private void ThirdPersonConrtoller()
     {
-        float mouseY = inputManager.GetMouseDeltaY * mouseSensitivity * Time.deltaTime;
+       //float mouseY = inputManager.GetMouseDeltaY * mouseSensitivity * Time.deltaTime;
     }
 }

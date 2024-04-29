@@ -1,7 +1,7 @@
+using Cinemachine;
 using Mirror;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Playables;
 
 public class PlayerMovement : NetworkBehaviour, IPlayer, IHumanoid, ISee, IMove
 {
@@ -31,6 +31,7 @@ public class PlayerMovement : NetworkBehaviour, IPlayer, IHumanoid, ISee, IMove
     [Header("Components")]
     [SerializeField] private InputManager inputManager;
     [SerializeField] private PlayerAnimationController animationController;
+    [SerializeField] private CinemachineVirtualCamera virtualCamera;
     private CharacterController characterController;
 
     [Header("Humanoids")]
@@ -45,6 +46,14 @@ public class PlayerMovement : NetworkBehaviour, IPlayer, IHumanoid, ISee, IMove
         animationController.SetIMove(this);
 
         inputManager = GameObject.FindGameObjectWithTag("InputManager").GetComponent<InputManager>();
+
+        if (isLocalPlayer)
+        {
+            Debug.Log("gameObject.name: " + gameObject.name);
+            Debug.Log("virtualCamera.Priority: " + virtualCamera.Priority);
+            virtualCamera.Priority = 5;
+            Debug.Log("virtualCamera.Priority: " + virtualCamera.Priority);
+        }
 
     }
 
@@ -174,6 +183,10 @@ public class PlayerMovement : NetworkBehaviour, IPlayer, IHumanoid, ISee, IMove
         if (moveHorizontal == 0 && moveVertical == 0)
         {
             ChangeState(PlayerState.Idle);
+        }
+        else if(inputManager.GetIsLeftShift)
+        {
+            ChangeState(PlayerState.Run);
         }
         else
         {
